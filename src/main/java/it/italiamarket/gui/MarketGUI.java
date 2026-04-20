@@ -79,17 +79,19 @@ public class MarketGUI {
 
         if (page > 0) {
             ItemStack prev = createItem(Material.ARROW, ChatColor.WHITE + "Pagina precedente",
-                    Collections.singletonList(ChatColor.GRAY + "Pagina " + page + "/" + totalPages));
+                    Collections.singletonList(ChatColor.GRAY + "Pagina " + String.valueOf(page) + "/" + String.valueOf(totalPages)));
             inv.setItem(48, prev);
         }
 
-        ItemStack info = createItem(Material.PAPER, ChatColor.WHITE + "Pagina " + (page + 1) + "/" + totalPages,
-                Collections.singletonList(ChatColor.GRAY + listings.size() + " oggetti in vendita"));
+        String pageInfo = String.valueOf(page + 1) + "/" + String.valueOf(totalPages);
+        String countInfo = String.valueOf(listings.size()) + " oggetti in vendita";
+        ItemStack info = createItem(Material.PAPER, ChatColor.WHITE + "Pagina " + pageInfo,
+                Collections.singletonList(ChatColor.GRAY + countInfo));
         inv.setItem(49, info);
 
         if (page < totalPages - 1) {
             ItemStack next = createItem(Material.ARROW, ChatColor.WHITE + "Pagina successiva",
-                    Collections.singletonList(ChatColor.GRAY + "Pagina " + (page + 2) + "/" + totalPages));
+                    Collections.singletonList(ChatColor.GRAY + "Pagina " + String.valueOf(page + 2) + "/" + String.valueOf(totalPages)));
             inv.setItem(50, next);
         }
 
@@ -152,8 +154,9 @@ public class MarketGUI {
         }
         inv.setItem(13, display);
 
+        String prezzoStr = "$" + String.valueOf(listing.getPrice());
         ItemStack confirm = createItem(Material.LIME_WOOL, ChatColor.GREEN + "Conferma acquisto",
-                Collections.singletonList(ChatColor.GRAY + "Pagherai $" + listing.getPrice()));
+                Collections.singletonList(ChatColor.GRAY + "Pagherai " + prezzoStr));
         inv.setItem(11, confirm);
 
         ItemStack cancel = createItem(Material.RED_WOOL, ChatColor.RED + "Annulla",
