@@ -34,9 +34,9 @@ public class MarketGUI {
         int totalPages = Math.max(1, (int) Math.ceil(listings.size() / (double) itemsPerPage));
         page = Math.max(0, Math.min(page, totalPages - 1));
 
-        String title = search != null ?
-                ChatColor.GREEN + "\uD83D\uDD0D Ricerca: " + search :
-                ChatColor.GREEN + "\uD83C\uDFEA Mercato";
+ String title = search != null ?
+        ChatColor.GREEN + "Ricerca: " + search :
+        ChatColor.GREEN + "Mercato";
 
         Inventory inv = Bukkit.createInventory(null, 54, title);
 
