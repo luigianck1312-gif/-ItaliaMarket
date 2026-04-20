@@ -16,10 +16,10 @@ public class MarketGUI {
 
     private final ItaliaMarket plugin;
 
-    public static final Map<UUID, String> openGUI = new HashMap<>(); // uuid -> tipo gui
+    public static final Map<UUID, String> openGUI = new HashMap<>();
     public static final Map<UUID, Integer> currentPage = new HashMap<>();
     public static final Map<UUID, String> searchQuery = new HashMap<>();
-    public static final Map<UUID, String> pendingBuy = new HashMap<>(); // uuid -> listing id
+    public static final Map<UUID, String> pendingBuy = new HashMap<>();
 
     public MarketGUI(ItaliaMarket plugin) {
         this.plugin = plugin;
@@ -34,13 +34,15 @@ public class MarketGUI {
         int totalPages = Math.max(1, (int) Math.ceil(listings.size() / (double) itemsPerPage));
         page = Math.max(0, Math.min(page, totalPages - 1));
 
- String title = search != null ?
-        ChatColor.GREEN + "Ricerca: " + search :
-        ChatColor.GREEN + "Mercato";
+        String title;
+        if (search != null) {
+            title = ChatColor.GREEN + "Ricerca: " + search;
+        } else {
+            title = ChatColor.GREEN + "Mercato";
+        }
 
         Inventory inv = Bukkit.createInventory(null, 54, title);
 
-        // Riempi con listings
         int start = page * itemsPerPage;
         int end = Math.min(start + itemsPerPage, listings.size());
 
@@ -58,46 +60,39 @@ public class MarketGUI {
             List<String> lore = new ArrayList<>();
             lore.add(ChatColor.GRAY + "Venditore: " + ChatColor.WHITE + listing.getSellerName());
             lore.add(ChatColor.GRAY + "Prezzo: " + ChatColor.GREEN + "$" + listing.getPrice());
-            lore.add(ChatColor.GRAY + "Quantità: " + ChatColor.WHITE + listing.getItem().getAmount());
+            lore.add(ChatColor.GRAY + "Quantita: " + ChatColor.WHITE + listing.getItem().getAmount());
             lore.add("");
             lore.add(ChatColor.YELLOW + "Clicca per comprare!");
-            lore.add(ChatColor.BLACK + listing.getId()); // ID nascosto
+            lore.add(ChatColor.BLACK + listing.getId());
             meta.setLore(lore);
             display.setItemMeta(meta);
             inv.setItem(i - start, display);
         }
 
-        // Bottoni navigazione in basso
-        // Slot 45: I miei annunci
         ItemStack miei = createItem(Material.CHEST, ChatColor.AQUA + "I miei annunci",
                 Collections.singletonList(ChatColor.GRAY + "Vedi i tuoi oggetti in vendita"));
         inv.setItem(45, miei);
 
-        // Slot 46: Cerca
         ItemStack cerca = createItem(Material.COMPASS, ChatColor.YELLOW + "Cerca oggetto",
                 Collections.singletonList(ChatColor.GRAY + "Digita nel chat il nome da cercare"));
         inv.setItem(46, cerca);
 
-        // Slot 48: Pagina precedente
         if (page > 0) {
-            ItemStack prev = createItem(Material.ARROW, ChatColor.WHITE + "← Pagina precedente",
+            ItemStack prev = createItem(Material.ARROW, ChatColor.WHITE + "Pagina precedente",
                     Collections.singletonList(ChatColor.GRAY + "Pagina " + page + "/" + totalPages));
             inv.setItem(48, prev);
         }
 
-        // Slot 49: Info pagina
         ItemStack info = createItem(Material.PAPER, ChatColor.WHITE + "Pagina " + (page + 1) + "/" + totalPages,
                 Collections.singletonList(ChatColor.GRAY + listings.size() + " oggetti in vendita"));
         inv.setItem(49, info);
 
-        // Slot 50: Pagina successiva
         if (page < totalPages - 1) {
-            ItemStack next = createItem(Material.ARROW, ChatColor.WHITE + "Pagina successiva →",
+            ItemStack next = createItem(Material.ARROW, ChatColor.WHITE + "Pagina successiva",
                     Collections.singletonList(ChatColor.GRAY + "Pagina " + (page + 2) + "/" + totalPages));
             inv.setItem(50, next);
         }
 
-        // Slot 53: Chiudi
         ItemStack close = createItem(Material.BARRIER, ChatColor.RED + "Chiudi", Collections.emptyList());
         inv.setItem(53, close);
 
@@ -127,7 +122,7 @@ public class MarketGUI {
             meta.setDisplayName(ChatColor.YELLOW + itemName);
             List<String> lore = new ArrayList<>();
             lore.add(ChatColor.GRAY + "Prezzo: " + ChatColor.GREEN + "$" + listing.getPrice());
-            lore.add(ChatColor.GRAY + "Quantità: " + ChatColor.WHITE + listing.getItem().getAmount());
+            lore.add(ChatColor.GRAY + "Quantita: " + ChatColor.WHITE + listing.getItem().getAmount());
             lore.add("");
             lore.add(ChatColor.RED + "Clicca per ritirare!");
             lore.add(ChatColor.BLACK + listing.getId());
@@ -136,8 +131,7 @@ public class MarketGUI {
             inv.setItem(i, display);
         }
 
-        // Bottone torna indietro
-        ItemStack back = createItem(Material.ARROW, ChatColor.WHITE + "← Torna al mercato", Collections.emptyList());
+        ItemStack back = createItem(Material.ARROW, ChatColor.WHITE + "Torna al mercato", Collections.emptyList());
         inv.setItem(49, back);
 
         openGUI.put(player.getUniqueId(), "miei");
@@ -147,7 +141,6 @@ public class MarketGUI {
     public void openConfirmBuy(Player player, MarketListing listing) {
         Inventory inv = Bukkit.createInventory(null, 27, ChatColor.YELLOW + "Conferma acquisto");
 
-        // Oggetto da comprare al centro
         ItemStack display = listing.getItem().clone();
         ItemMeta meta = display.getItemMeta();
         if (meta != null) {
@@ -159,13 +152,11 @@ public class MarketGUI {
         }
         inv.setItem(13, display);
 
-        // Conferma
-        ItemStack confirm = createItem(Material.LIME_WOOL, ChatColor.GREEN + "✔ Conferma acquisto",
+        ItemStack confirm = createItem(Material.LIME_WOOL, ChatColor.GREEN + "Conferma acquisto",
                 Collections.singletonList(ChatColor.GRAY + "Pagherai $" + listing.getPrice()));
         inv.setItem(11, confirm);
 
-        // Annulla
-        ItemStack cancel = createItem(Material.RED_WOOL, ChatColor.RED + "✖ Annulla",
+        ItemStack cancel = createItem(Material.RED_WOOL, ChatColor.RED + "Annulla",
                 Collections.singletonList(ChatColor.GRAY + "Torna al mercato"));
         inv.setItem(15, cancel);
 
