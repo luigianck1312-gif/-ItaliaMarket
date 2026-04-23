@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.HashSet;
@@ -52,19 +53,19 @@ public class MarketListener implements Listener {
         if (gui.equals("market")) {
             int slot = e.getSlot();
 
-            if (slot == 53) { // Chiudi
+            if (slot == 53) {
                 player.closeInventory();
                 MarketGUI.openGUI.remove(uuid);
                 return;
             }
 
-            if (slot == 45) { // I miei annunci
+            if (slot == 45) {
                 player.closeInventory();
                 plugin.getMarketGUI().openMieiAnnunci(player);
                 return;
             }
 
-            if (slot == 46) { // Cerca
+            if (slot == 46) {
                 player.closeInventory();
                 MarketGUI.openGUI.remove(uuid);
                 waitingSearch.add(uuid);
@@ -72,7 +73,7 @@ public class MarketListener implements Listener {
                 return;
             }
 
-            if (slot == 48) { // Pagina precedente
+            if (slot == 48) {
                 int page = MarketGUI.currentPage.getOrDefault(uuid, 0);
                 String search = MarketGUI.searchQuery.get(uuid);
                 player.closeInventory();
@@ -80,7 +81,7 @@ public class MarketListener implements Listener {
                 return;
             }
 
-            if (slot == 50) { // Pagina successiva
+            if (slot == 50) {
                 int page = MarketGUI.currentPage.getOrDefault(uuid, 0);
                 String search = MarketGUI.searchQuery.get(uuid);
                 player.closeInventory();
@@ -88,9 +89,7 @@ public class MarketListener implements Listener {
                 return;
             }
 
-            // Click su oggetto
             if (slot < 45 && e.getCurrentItem() != null) {
-                // Recupera ID dal lore
                 if (e.getCurrentItem().getItemMeta() == null) return;
                 java.util.List<String> lore = e.getCurrentItem().getItemMeta().getLore();
                 if (lore == null || lore.isEmpty()) return;
@@ -119,7 +118,7 @@ public class MarketListener implements Listener {
         else if (gui.equals("miei")) {
             int slot = e.getSlot();
 
-            if (slot == 49) { // Torna al mercato
+            if (slot == 49) {
                 player.closeInventory();
                 plugin.getMarketGUI().openMarket(player, 0, null);
                 return;
@@ -137,7 +136,6 @@ public class MarketListener implements Listener {
                     return;
                 }
 
-                // Ritira oggetto
                 plugin.getMarketManager().removeListing(id);
                 player.getInventory().addItem(listing.getItem());
                 player.sendMessage(ChatColor.GREEN + "Oggetto ritirato dal mercato!");
@@ -150,7 +148,7 @@ public class MarketListener implements Listener {
         else if (gui.equals("confirm")) {
             int slot = e.getSlot();
 
-            if (slot == 11) { // Conferma
+            if (slot == 11) {
                 String listingId = MarketGUI.pendingBuy.get(uuid);
                 if (listingId == null) { player.closeInventory(); return; }
 
@@ -166,15 +164,16 @@ public class MarketListener implements Listener {
                 plugin.getMarketGUI().openMarket(player, 0, null);
             }
 
-            if (slot == 15) { // Annulla
+            if (slot == 15) {
                 MarketGUI.pendingBuy.remove(uuid);
                 player.closeInventory();
                 plugin.getMarketGUI().openMarket(player, 0, null);
-}
+            }
+        }
     }
 
     @EventHandler
-    public void onClose(org.bukkit.event.inventory.InventoryCloseEvent e) {
+    public void onClose(InventoryCloseEvent e) {
         if (!(e.getPlayer() instanceof Player player)) return;
         MarketGUI.openGUI.remove(player.getUniqueId());
         MarketGUI.currentPage.remove(player.getUniqueId());
