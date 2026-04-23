@@ -1,0 +1,15 @@
+name: ItaliaShop
+version: 2.0.0
+main: it.italiashop.ItaliaShop
+api-version: 1.21
+description: Shop e PvP Arena per SteelThrone
+authors: [ItaliaShop]
+depend: [Vault]
+commands:
+  npc:
+    description: Gestione NPC
+    usage: /npc <place|remove> <mercato|pvp>
+permissions:
+  italiashop.admin:
+    description: Permessi admin shop
+    default: op
