@@ -170,7 +170,15 @@ public class MarketListener implements Listener {
                 MarketGUI.pendingBuy.remove(uuid);
                 player.closeInventory();
                 plugin.getMarketGUI().openMarket(player, 0, null);
-            }
-        }
+}
+    }
+
+    @EventHandler
+    public void onClose(org.bukkit.event.inventory.InventoryCloseEvent e) {
+        if (!(e.getPlayer() instanceof Player player)) return;
+        MarketGUI.openGUI.remove(player.getUniqueId());
+        MarketGUI.currentPage.remove(player.getUniqueId());
+        MarketGUI.searchQuery.remove(player.getUniqueId());
+        MarketGUI.pendingBuy.remove(player.getUniqueId());
     }
 }
