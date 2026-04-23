@@ -487,7 +487,10 @@ public class ShopManager {
         add(Material.BRUSH, "Pennello", ShopItem.Category.DECORAZIONI, 1280000, 512000, 256000, 3200000, false, 0, 1);
 
         // BLOCCHI QUARTZ EXTRA
-        add(Material.QUARTZ_BRICKS, "Mattoni Quarzo", ShopItem.Category.MINERALI, 10880000, 4352000, 2176000, 27200000, false, 0, 64); 500000000, 200000000, 100000000, 1000000000, true, 7, 1);
+        add(Material.QUARTZ_BRICKS, "Mattoni Quarzo", ShopItem.Category.MINERALI, 10880000, 4352000, 2176000, 27200000, false, 0, 64);
+
+        // RARI
+        add(Material.TOTEM_OF_UNDYING, "Totem", ShopItem.Category.RARI, 500000000, 200000000, 100000000, 1000000000, true, 7, 1);
         add(Material.ELYTRA, "Elitra", ShopItem.Category.RARI, 1000000000, 400000000, 200000000, 2000000000, true, 7, 1);
         add(Material.HEART_OF_THE_SEA, "Cuore del Mare", ShopItem.Category.RARI, 200000000, 80000000, 40000000, 500000000, true, 3, 1);
         add(Material.NETHER_STAR, "Stella Nether", ShopItem.Category.RARI, 300000000, 120000000, 60000000, 700000000, true, 3, 1);
